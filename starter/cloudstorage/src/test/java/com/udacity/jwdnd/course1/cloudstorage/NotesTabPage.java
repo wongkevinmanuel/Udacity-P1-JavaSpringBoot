@@ -69,8 +69,6 @@ public class NotesTabPage {
 
     public void editarNota(WebDriver driver,String title, String desription){
         WebDriverWait wait = new WebDriverWait(driver,10);
-        /*@FindBy(id="editar-nota")
-        private List<WebElement> editButtons;*/
         WebElement editarBotones = null;
         try {
             //wait.until(ExpectedConditions.visibilityOf(editButtons.get(0))).click();
