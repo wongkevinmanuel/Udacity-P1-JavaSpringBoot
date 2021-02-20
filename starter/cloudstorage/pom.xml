@@ -19,6 +19,9 @@
     </properties>
 
     <dependencies>
+        <!--
+        Parece que la interfas AuthenticationProvider esta en la
+        siguiente dependencia-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -60,11 +63,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Estaba en comentario -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>

@@ -5,20 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
-
         <title>Login</title>
     </head>
     <body class="p-3 mb-2 bg-light text-black">
         <div class="container justify-content-center w-25 p-3" style="background-color: #eeeeee; margin-top: 5em;">
             <h1 class="display-5">Login</h1>
-            <form action="#" method="POST">
-                <div class="alert alert-danger">
-                    Invalid username or password
+            <form action="#" method="POST" th:action="@{/login}">
+                <div class="alert alert-success" id="success-msg" th:if="${registroUsuarioCorrecto}">
+                    <span th:text="#{usuario.guardar}"></span> <span th:text="${nombreUsuario}"></span>.
                 </div>
-                <div class="alert alert-dark">
-                    You have been logged out
+                <div id="mensajeErrorUsuario" class="alert alert-danger" th:if="${estadoAutenticacionError}">
+                    <span th:text="#{usuario.error}"></span>
                 </div>
-                <div class="form-group">
+                <div id="mensajeLooggedOut" class="alert alert-dark" th:if="${estadoAutenticacionSalida}">
+                    You have been logged out.
+                </div>
+                <div class="form-group" >
                     <label for="inputUsername">Username</label>
                     <input type="input" class="form-control" name="username" id="inputUsername" placeholder="Enter Username" maxlength="20" required>
                 </div>
@@ -26,11 +28,12 @@
                     <label for="inputPassword">Password</label>
                     <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Enter Password" maxlength="20" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button id="submit-button" type="submit"
+                        class="btn btn-primary">Login
+                </button>
             </form>
-
             <div class="form-group" style="margin-top: 0.5em;">
-                <label><a>Click here to sign up</a></label>
+                <label><a th:href="@{/signup}">Click here to sign up</a></label>
             </div>
         </div>
     </body>
