@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -26,12 +27,15 @@ class CloudStorageApplicationTests {
 		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
+		//Declared an implicit wait with the time frame of 10 seconds
+		// si el elemento no se encuentra en la página web dentro 10 s, lanzará una excepción
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 	}
 
 	@BeforeEach
 	public void beforeEach() throws InterruptedException  {
 		Thread.sleep(1000);
-		waitDriverWeb = new WebDriverWait(driver, 40);
+		waitDriverWeb = new WebDriverWait(driver, 20);
 	}
 
 	@AfterAll
@@ -46,7 +50,7 @@ class CloudStorageApplicationTests {
 	public void accesoPaginaInicioUsuarioNoLogin() throws InterruptedException {
 		driver.get("http://localhost:" + this.port + "/home");
 		Assertions.assertEquals("Login", driver.getTitle());
-		Thread.sleep(4000);
+		Thread.sleep(1000);
 	}
 
     @Test
@@ -54,7 +58,7 @@ class CloudStorageApplicationTests {
     public void accesoPaginaRegistroUsuarioNoLogin() throws InterruptedException{
         driver.get("http://localhost:" + this.port + "/signup");
         Assertions.assertEquals("SignUp",driver.getTitle());
-		Thread.sleep(4000);
+		Thread.sleep(1000);
     }
 
 	@Order(3)
@@ -77,13 +81,13 @@ class CloudStorageApplicationTests {
 		//Realiza el logout
 		driver.get("http://localhost:" + this.port + "/home");
 		HomePage paginaHome = new HomePage(driver);
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		paginaHome.logout();
 
 		//Verficar Salida
 		driver.get("http://localhost:" + this.port + "/home");
 		Assertions.assertEquals("Login", driver.getTitle());
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 	}
 
 	@Test
@@ -119,19 +123,19 @@ class CloudStorageApplicationTests {
 								.elementToBeClickable((By.id("agregar-nota"))));
 		botonAgregarNota.click();
 		tabNota.guardarNota(driver,title,description);
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 
 		//Home
 		driver.get("http://localhost:" + this.port + "/home");
-		waitDriverWeb.until(ExpectedConditions
-					.elementToBeClickable(By.xpath("//*[@id=\"nav-notes-tab\"]")))
-					.click();
+		WebElement navNotesTab2 = waitDriverWeb.until(ExpectedConditions
+					.elementToBeClickable(By.xpath("//*[@id=\"nav-notes-tab\"]")));
+		navNotesTab2.click();
 
 		////////////////////////////////////// READ
 		List<String> detalleNota = tabNota.obtenerDetallenNota(driver);
 		Assertions.assertEquals(title, detalleNota.get(0));
 		Assertions.assertEquals(description, detalleNota.get(1));
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 
 		/////////////////////////////////////// UPDATE
 		String titleAct= "Nota TKD actualizada";
@@ -141,31 +145,31 @@ class CloudStorageApplicationTests {
 
 		//Home
 		driver.get("http://localhost:" + this.port + "/home");
-		waitDriverWeb.until(ExpectedConditions
-				.elementToBeClickable(By.xpath("//*[@id=\"nav-notes-tab\"]")))
-				.click();
+		WebElement navNotesTab3 = waitDriverWeb.until(ExpectedConditions
+				.elementToBeClickable(By.xpath("//*[@id=\"nav-notes-tab\"]")));
+		navNotesTab3.click();
 
 		List<String> detalleNota2 = tabNota.obtenerDetallenNota(driver);
 		Assertions.assertEquals(titleAct, detalleNota2.get(0));
 		Assertions.assertEquals(descriptionAct, detalleNota2.get(1));
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 
 		////////////////////////////////////// DELETE
 		driver.get("http://localhost:" + this.port + "/home");
-		waitDriverWeb.until(ExpectedConditions
-				.elementToBeClickable(By.xpath("//*[@id=\"nav-notes-tab\"]")))
-				.click();
+		WebElement navNotesTab4 =waitDriverWeb.until(ExpectedConditions
+				.elementToBeClickable(By.xpath("//*[@id=\"nav-notes-tab\"]")));
+		navNotesTab4.click();
 
 		tabNota.eliminarNota(driver);
 
 		driver.get("http://localhost:" + this.port + "/home");
-		waitDriverWeb.until(ExpectedConditions
-				.elementToBeClickable(By.xpath("//*[@id=\"nav-notes-tab\"]")))
-				.click();
+		WebElement navNotesTab5 = waitDriverWeb.until(ExpectedConditions
+				.elementToBeClickable(By.xpath("//*[@id=\"nav-notes-tab\"]")));
+		navNotesTab5.click();
 
 		boolean isnoteTitlePresent = driver.findElements(By.id("row-note-title")).size() <= 0 ?  true : false;
 		Assertions.assertEquals(true,isnoteTitlePresent);
-		Thread.sleep(3000);
+		Thread.sleep(2000);
 	}
 
 	@Test
@@ -195,21 +199,22 @@ class CloudStorageApplicationTests {
 
 		//Home
 		driver.get("http://localhost:" + this.port + "/home");
-		waitDriverWeb.until(ExpectedConditions
-				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")))
-				.click();
+		WebElement navCredencialTab1 = waitDriverWeb.until(ExpectedConditions
+				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")));
+		navCredencialTab1.click();
 
 		///////////////////////////////////////////////// READ
 		List<String> detalleCredencial = tabCredential.obtenerDetalleCredencial(driver);
 		Assertions.assertEquals(credentialUrl, detalleCredencial.get(0));
 		Assertions.assertEquals(credentialUsername, detalleCredencial.get(1));
-		Thread.sleep(3000);
+		Thread.sleep(1000);
 
 		//////////////////////////////////////////////// UPDATE
 		//Home
 		driver.get("http://localhost:" + this.port + "/home");
-		waitDriverWeb.until(ExpectedConditions
-				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]"))).click();
+		WebElement navCredencialTab2 =waitDriverWeb.until(ExpectedConditions
+				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")));
+		navCredencialTab2.click();
 
 		String credentialUrlAct = "www.kevwongmundofelizactualizado.com";
 		String credentialUserNameAct = "kev";
@@ -220,28 +225,28 @@ class CloudStorageApplicationTests {
 
 		//Home
 		driver.get("http://localhost:" + this.port + "/home");
-		waitDriverWeb.until(ExpectedConditions
-				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")))
-				.click();
+		WebElement navCredencialTab3 =waitDriverWeb.until(ExpectedConditions
+				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")));
+		navCredencialTab3.click();
 
 		List<String> detalleCredencial2 = tabCredential.obtenerDetalleCredencial(driver);
 		Assertions.assertEquals(credentialUrlAct, detalleCredencial2.get(0));
 		Assertions.assertEquals(credentialUserNameAct, detalleCredencial2.get(1));
-		Thread.sleep(3000);
+		Thread.sleep(1000);
 
 		/******************* DELETE ****************************************/
 		driver.get("http://localhost:"+this.port + "/home");
-		waitDriverWeb.until(ExpectedConditions
-				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")))
-				.click();
+		WebElement navCredencialTab4 = waitDriverWeb.until(ExpectedConditions
+				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")));
+		navCredencialTab4.click();
 		tabCredential.eliminarCredencial(driver);
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 
 		//Home
 		driver.get("http://localhost:"+this.port + "/home");
-		waitDriverWeb.until(ExpectedConditions
-				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")))
-				.click();
+		WebElement navCredencialTab5 = waitDriverWeb.until(ExpectedConditions
+				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")));
+		navCredencialTab5.click();
 
 		boolean isCredencialPresente= false;
 		if(driver.findElements(By.id("row-credencial-url")).size() <= 0)
@@ -250,6 +255,6 @@ class CloudStorageApplicationTests {
 			isCredencialPresente = false;
 
 		Assertions.assertEquals(true, isCredencialPresente);
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 	}
 }
