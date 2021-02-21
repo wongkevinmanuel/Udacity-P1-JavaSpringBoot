@@ -63,7 +63,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- Estaba en comentario -->
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
@@ -94,6 +94,13 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+        <!-- Lombok-ize -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version> 1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 
     <build>
