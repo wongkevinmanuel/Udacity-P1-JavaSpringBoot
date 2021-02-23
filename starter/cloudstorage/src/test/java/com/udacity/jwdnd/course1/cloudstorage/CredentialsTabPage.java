@@ -59,7 +59,6 @@ public class CredentialsTabPage {
 
     public List<String> obtenerDetalleCredencial(WebDriver webDriver){
         WebDriverWait driverWait = new WebDriverWait(webDriver, 10);
-
         List<String> detalleCredencial = new ArrayList<>(
                 List.of(urls.get(0).getText()
                 ,userNames.get(0).getText()

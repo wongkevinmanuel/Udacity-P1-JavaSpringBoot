@@ -130,12 +130,12 @@ class CloudStorageApplicationTests {
 		WebElement navNotesTab2 = waitDriverWeb.until(ExpectedConditions
 					.elementToBeClickable(By.xpath("//*[@id=\"nav-notes-tab\"]")));
 		navNotesTab2.click();
+		Thread.sleep(2000);
 
 		////////////////////////////////////// READ
 		List<String> detalleNota = tabNota.obtenerDetallenNota(driver);
 		Assertions.assertEquals(title, detalleNota.get(0));
 		Assertions.assertEquals(description, detalleNota.get(1));
-		Thread.sleep(1000);
 
 		/////////////////////////////////////// UPDATE
 		String titleAct= "Nota TKD actualizada";
@@ -148,11 +148,11 @@ class CloudStorageApplicationTests {
 		WebElement navNotesTab3 = waitDriverWeb.until(ExpectedConditions
 				.elementToBeClickable(By.xpath("//*[@id=\"nav-notes-tab\"]")));
 		navNotesTab3.click();
+		Thread.sleep(2000);
 
 		List<String> detalleNota2 = tabNota.obtenerDetallenNota(driver);
 		Assertions.assertEquals(titleAct, detalleNota2.get(0));
 		Assertions.assertEquals(descriptionAct, detalleNota2.get(1));
-		Thread.sleep(1000);
 
 		////////////////////////////////////// DELETE
 		driver.get("http://localhost:" + this.port + "/home");
@@ -166,10 +166,11 @@ class CloudStorageApplicationTests {
 		WebElement navNotesTab5 = waitDriverWeb.until(ExpectedConditions
 				.elementToBeClickable(By.xpath("//*[@id=\"nav-notes-tab\"]")));
 		navNotesTab5.click();
+		Thread.sleep(2000);
 
 		boolean isnoteTitlePresent = driver.findElements(By.id("row-note-title")).size() <= 0 ?  true : false;
 		Assertions.assertEquals(true,isnoteTitlePresent);
-		Thread.sleep(2000);
+
 	}
 
 	@Test
@@ -195,24 +196,33 @@ class CloudStorageApplicationTests {
 											.elementToBeClickable(By.xpath("//*[@id=\"agregar-credencial\"]")));
 		botonAgregarCredential.click();
 		tabCredential.guardarCredencial(driver,credentialUrl,credentialUsername,credentialPassword);
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 
 		//Home
 		driver.get("http://localhost:" + this.port + "/home");
 		WebElement navCredencialTab1 = waitDriverWeb.until(ExpectedConditions
 				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")));
 		navCredencialTab1.click();
+		Thread.sleep(2000);
 
 		///////////////////////////////////////////////// READ
+		// Elementos xpath the tb
+		// //*[@id="row-credencial-url"]
+		// //*[@id="row-credencial-username"]
+		// //*[@id="row-credencial-password"]
 		List<String> detalleCredencial = tabCredential.obtenerDetalleCredencial(driver);
-		Assertions.assertEquals(credentialUrl, detalleCredencial.get(0));
-		Assertions.assertEquals(credentialUsername, detalleCredencial.get(1));
-		Thread.sleep(1000);
-
+		try{
+			if(detalleCredencial.size() == 0){
+				Thread.sleep(1000);
+				detalleCredencial = tabCredential.obtenerDetalleCredencial(driver);
+			}
+			Assertions.assertEquals(credentialUrl, detalleCredencial.get(0));
+			Assertions.assertEquals(credentialUsername, detalleCredencial.get(1));
+		}catch (Exception exception){}
 		//////////////////////////////////////////////// UPDATE
 		//Home
 		driver.get("http://localhost:" + this.port + "/home");
-		WebElement navCredencialTab2 =waitDriverWeb.until(ExpectedConditions
+		WebElement navCredencialTab2 = waitDriverWeb.until(ExpectedConditions
 				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")));
 		navCredencialTab2.click();
 
@@ -228,13 +238,19 @@ class CloudStorageApplicationTests {
 		WebElement navCredencialTab3 =waitDriverWeb.until(ExpectedConditions
 				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")));
 		navCredencialTab3.click();
+		Thread.sleep(2000);
 
 		List<String> detalleCredencial2 = tabCredential.obtenerDetalleCredencial(driver);
-		Assertions.assertEquals(credentialUrlAct, detalleCredencial2.get(0));
-		Assertions.assertEquals(credentialUserNameAct, detalleCredencial2.get(1));
-		Thread.sleep(1000);
+		try{
+			if(detalleCredencial2.size() == 0) {
+				Thread.sleep(1000);
+				detalleCredencial2 = tabCredential.obtenerDetalleCredencial(driver);
+			}
+			Assertions.assertEquals(credentialUrlAct, detalleCredencial2.get(0));
+			Assertions.assertEquals(credentialUserNameAct, detalleCredencial2.get(1));
+		}catch (Exception exception){}
 
-		/******************* DELETE ****************************************/
+		//////////////////////////////////// DELETE //////////////////
 		driver.get("http://localhost:"+this.port + "/home");
 		WebElement navCredencialTab4 = waitDriverWeb.until(ExpectedConditions
 				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")));
@@ -247,6 +263,7 @@ class CloudStorageApplicationTests {
 		WebElement navCredencialTab5 = waitDriverWeb.until(ExpectedConditions
 				.elementToBeClickable(By.xpath("//*[@id=\"nav-credentials-tab\"]")));
 		navCredencialTab5.click();
+		Thread.sleep(2000);
 
 		boolean isCredencialPresente= false;
 		if(driver.findElements(By.id("row-credencial-url")).size() <= 0)
@@ -255,6 +272,6 @@ class CloudStorageApplicationTests {
 			isCredencialPresente = false;
 
 		Assertions.assertEquals(true, isCredencialPresente);
-		Thread.sleep(1000);
+
 	}
 }

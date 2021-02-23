@@ -15,8 +15,7 @@ public class Notes implements Serializable {
     private Integer userId;
 
 //    public Notes(){
-//
-//    }
+//  }
 //
 //    public Notes(Integer noteId, String noteTitle
 //            , String noteDescription, Integer userId) {
@@ -54,9 +53,7 @@ public class Notes implements Serializable {
 //        return userId;
 //    }
 //
-//    public void setUserId(Integer userId) {
+//   public void setUserId(Integer userId) {
 //        this.userId = userId;
 //    }
-
-//    public Notes(){}
 }
